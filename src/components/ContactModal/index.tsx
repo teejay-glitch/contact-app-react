@@ -7,11 +7,23 @@ type ContactModalProps = {
     open: boolean;
     property: Contact;
     headerName: string;
+    phoneError: boolean;
+    emailError: boolean;
     toggleModal: (data: Contact) => void;
     handleChange: (key: string, value: string) => void;
+    handleUpdate: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>;
 };
 
-const ContactModal: React.FC<ContactModalProps> = ({ open, property, headerName, toggleModal, handleChange }: ContactModalProps) => {
+const ContactModal: React.FC<ContactModalProps> = ({
+    open,
+    property,
+    headerName,
+    phoneError,
+    emailError,
+    toggleModal,
+    handleChange,
+    handleUpdate,
+}: ContactModalProps) => {
     return (
         <React.Fragment>
             <Modal open={open}>
@@ -57,6 +69,8 @@ const ContactModal: React.FC<ContactModalProps> = ({ open, property, headerName,
                                 onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
                                     handleChange("phone", e.target.value)
                                 }
+                                error={phoneError}
+                                helperText={phoneError ? "Phone number must be 10 digits" : ""}
                             />
                         </Grid2>
 
@@ -69,12 +83,14 @@ const ContactModal: React.FC<ContactModalProps> = ({ open, property, headerName,
                                 onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
                                     handleChange("email", e.target.value)
                                 }
+                                error={emailError}
+                                helperText={emailError ? "Invalid email" : ""}
                             />
                         </Grid2>
                     </Grid2>
 
                     <Box display={"flex"} mt={3} gap={"10px"} justifyContent={"center"}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={(e) => handleUpdate(e)} disabled={emailError || phoneError}>
                             Save
                         </Button>
                         <Button variant="contained" color="error" onClick={() => toggleModal(property)}>

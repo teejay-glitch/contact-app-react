@@ -5,6 +5,7 @@ import { ContactService } from "../services/ContactService";
 const useContacts = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [contacts, setContacts] = useState<Contact[]>([] as Contact[]);
+    const [contactList, setContactList] = useState<Contact[]>([] as Contact[]);
 
     useEffect(() => {
         fetchContacts();
@@ -18,6 +19,7 @@ const useContacts = () => {
 
             if (res?.status === 200) {
                 setContacts(res?.data);
+                setContactList(res?.data);
             } else {
                 throw new Error("Failed to fetch contacts");
             }
@@ -31,6 +33,8 @@ const useContacts = () => {
     return {
         loading,
         contacts,
+        contactList,
+        setContacts,
         fetchContacts,
     };
 };
